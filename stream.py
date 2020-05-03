@@ -193,7 +193,7 @@ if st.button('Predecir Precio'):
 	modelo = modelo_lasso_cross_validation(modeloMatriz)
 	nuevos_Feactures = nuevosDatos(modeloMatriz, SUPERFICIE_TOTAL, JARDIN, TERRAZA, CANTIDAD_DE_AMBIENTES, TIPO_DE_PROPIEDAD, BARRIO)
 	y_predict = modelo.predict(nuevos_Feactures)
-	st.title('El precio por M2 es de $'+str(y_predict[0].round(-1).astype(int)))
+	st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int)))
 
 
 
