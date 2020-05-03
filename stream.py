@@ -73,15 +73,14 @@ def nuevosDatos (p_modeloMatriz, superficie_total, jardin, terraza, ambientes, t
 
 
 
-
 def modelo_lasso_cross_validation(p_modeloMatriz):
     
     modeloMatriz = p_modeloMatriz
 
     xs = modeloMatriz.iloc[:,1:]
     y = modeloMatriz.iloc[:,0]
-    #xs = xs.as_matrix()
-    #y = y.as_matrix()
+    xs = np.array(xs)  
+    y = np.array(y) 
     lassocv = linear_model.LassoCV(alphas=np.linspace(0.01,100, 1000), cv=5, normalize=True)
     x_train, x_test, y_train, y_test = train_test_split(xs, y, test_size=0.4)
     lassocv.fit(x_train, y_train)
@@ -93,20 +92,18 @@ def modelo_lasso_cross_validation(p_modeloMatriz):
     scores = cross_val_score(lasso_model, x_train, y_train, cv=5)
     y_predict = lasso_model.predict(x_test)
 
-    plt.scatter(x_test[:,0], y_test, color='blue')
-    plt.scatter(x_test[:,0], y_predict, color='red')
+    #plt.scatter(x_test[:,0], y_test, color='blue')
+    #plt.scatter(x_test[:,0], y_predict, color='red')
 
-    print('LASSO REGRESSION')
-    print('CROSS VALIDATION:', scores[0], scores[1], scores[2], scores[3],scores[4])
-    print ('MAE LASSO:', metrics.mean_absolute_error(y_test, y_predict))
-    print ('MSE LASSO:', metrics.mean_squared_error(y_test, y_predict))
-    print ('RMSE LASSO:', np.sqrt(metrics.mean_squared_error(y_test, y_predict)))
-    print ("LASSO -> R2 TRAIN: ", lasso_model.score(x_train, y_train))
-    print ("LASSO -> R2 TEST: ", lasso_model.score(x_test, y_test))
+    #print('LASSO REGRESSION')
+    #print('CROSS VALIDATION:', scores[0], scores[1], scores[2], scores[3],scores[4])
+    #print ('MAE LASSO:', metrics.mean_absolute_error(y_test, y_predict))
+    #print ('MSE LASSO:', metrics.mean_squared_error(y_test, y_predict))
+    #print ('RMSE LASSO:', np.sqrt(metrics.mean_squared_error(y_test, y_predict)))
+    #print ("LASSO -> R2 TRAIN: ", lasso_model.score(x_train, y_train))
+    #print ("LASSO -> R2 TEST: ", lasso_model.score(x_test, y_test))
 
     return lasso_model
-
-
 
 
 
