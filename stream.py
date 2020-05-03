@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import unidecode as uni
-import Util as utl
+#import unidecode as uni
+#import Util as utl
 from sklearn.cross_validation import cross_val_score
 from sklearn import metrics
 from sklearn import linear_model
@@ -11,6 +11,10 @@ import matplotlib.pyplot as plt
 
 
 
+
+
+
+def nuevosDatos (p_modeloMatriz, superficie_total, jardin, terraza, ambientes, tipo, barrio):
 
                             
     modeloMatriz = p_modeloMatriz
@@ -67,6 +71,7 @@ import matplotlib.pyplot as plt
     #predecir_data.superficie_total_2 = predecir_data.superficie_total**2
 
     return predecir_data
+
 
 
 
@@ -189,8 +194,8 @@ BARRIO = var_barrio
 
 
 if st.button('Predecir Precio'):
-	modelo = utl.modelo_lasso_cross_validation(modeloMatriz)
-	nuevos_Feactures = utl.nuevosDatos(modeloMatriz, SUPERFICIE_TOTAL, JARDIN, TERRAZA, CANTIDAD_DE_AMBIENTES, TIPO_DE_PROPIEDAD, BARRIO)
+	modelo = modelo_lasso_cross_validation(modeloMatriz)
+	nuevos_Feactures = nuevosDatos(modeloMatriz, SUPERFICIE_TOTAL, JARDIN, TERRAZA, CANTIDAD_DE_AMBIENTES, TIPO_DE_PROPIEDAD, BARRIO)
 	y_predict = modelo.predict(nuevos_Feactures)
 	st.title('El precio por M2 es de $'+str(y_predict[0].round(-1).astype(int)))
 
