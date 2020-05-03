@@ -13,7 +13,6 @@ import matplotlib.pyplot as plt
 
 
 
-
 def nuevosDatos (p_modeloMatriz, superficie_total, jardin, terraza, ambientes, tipo, barrio):
 
                             
