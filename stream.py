@@ -80,8 +80,8 @@ def modelo_lasso_cross_validation(p_modeloMatriz):
 
     xs = modeloMatriz.iloc[:,1:]
     y = modeloMatriz.iloc[:,0]
-    xs = xs.as_matrix()
-    y = y.as_matrix()
+    #xs = xs.as_matrix()
+    #y = y.as_matrix()
     lassocv = linear_model.LassoCV(alphas=np.linspace(0.01,100, 1000), cv=5, normalize=True)
     x_train, x_test, y_train, y_test = train_test_split(xs, y, test_size=0.4)
     lassocv.fit(x_train, y_train)
