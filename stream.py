@@ -115,9 +115,9 @@ modeloMatriz = modeloMatriz.iloc[:,1:]
 
 
 st.title('Calcular Precio M2 (CABA)')
-st.title('')
 
-var_superficie = st.text_input("Ingrese la superficie", 0)
+
+var_superficie = st.text_input("Ingrese la superficie total a calcular", 0)
 
 
 
@@ -172,7 +172,7 @@ df = pd.DataFrame({
 diccionar_tipos = {'Casa':'CASA','Departamento':'DTO','PH':'PH'}
 
 var_barrio = st.selectbox(
-    'Elegi el barrio...',
+    'Elegi el barrio a calcular...',
      df['barrios'])
 
 
