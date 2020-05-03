@@ -1,12 +1,111 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import unidecode as uni
 import Util as utl
 from sklearn.cross_validation import cross_val_score
 from sklearn import metrics
 from sklearn import linear_model
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
+
+
+
+
+                            
+    modeloMatriz = p_modeloMatriz
+
+    ##SUPERFICIE TOTAL
+    df0 = pd.DataFrame({'superficie_total':pd.Series(superficie_total)})
+
+    ##BARRIOS
+    barrios = pd.Series(modeloMatriz.iloc[:,7:].columns)
+    barrios = (barrios.str.replace('_',' '))
+    df1 = barrios.apply(lambda x: 1 if x==barrio else 0)
+    df2 = pd.DataFrame(columns=barrios)
+    df2 = df2.append({ 'flores' : 0 } , ignore_index=True)
+    df2 = df2.fillna(0).astype(int)
+    df2.iloc[:,barrios[barrios.str.contains(barrio+'$',regex=True)].index] = '1'
+
+
+    ##AMBIENTES Y TIPOS
+
+
+    
+    if jardin=='1':
+        var_jardin = 'jardin'
+    else:
+        var_jardin = ''
+    if terraza=='1':
+        var_terraza = 'terraza'
+    else:
+        var_terraza = ''
+    if (jardin == '1') & (terraza == '1'):
+        var_jardinTerraza = 'jardinTerraza'
+    else:
+        var_jardinTerraza = ''
+
+    
+    df4 = pd.DataFrame({'jardin':pd.Series(0),'jardinTerraza':pd.Series(0),'CASA':pd.Series(0),'PH':pd.Series(0),'DTO':pd.Series(0)})
+    indices = df4.columns
+    indices = pd.Series(indices).astype(str)
+    indices_bool = (indices.apply(lambda x: x=='CASA')) | (indices.apply(lambda x: x==var_jardin)) | (indices.apply(lambda x: x==var_terraza)) | (indices.apply(lambda x: x==var_jardinTerraza))  
+    serie_df4 = indices_bool.apply(lambda x : 1 if x else 0)
+
+    df4_proc = pd.DataFrame({
+
+    'jardin':pd.Series(serie_df4[0]), 
+    'jardinTerraza':pd.Series(serie_df4[1]),
+    'CASA':pd.Series(serie_df4[2]),
+    'PH':pd.Series(serie_df4[3]),
+    'DTO':pd.Series(serie_df4[4])
+    })
+
+    
+    predecir_data = pd.concat([df0,df4_proc],axis=1)
+    predecir_data = pd.concat([predecir_data, df2],axis=1)
+    #predecir_data.superficie_total_2 = predecir_data.superficie_total**2
+
+    return predecir_data
+
+
+
+def modelo_lasso_cross_validation(p_modeloMatriz):
+    
+    modeloMatriz = p_modeloMatriz
+
+    xs = modeloMatriz.iloc[:,1:]
+    y = modeloMatriz.iloc[:,0]
+    xs = xs.as_matrix()
+    y = y.as_matrix()
+    lassocv = linear_model.LassoCV(alphas=np.linspace(0.01,100, 1000), cv=5, normalize=True)
+    x_train, x_test, y_train, y_test = train_test_split(xs, y, test_size=0.4)
+    lassocv.fit(x_train, y_train)
+    alpha_lasso = lassocv.alpha_
+
+    lasso = linear_model.Lasso(alpha=alpha_lasso, normalize=True)
+    x_train, x_test, y_train, y_test = train_test_split(xs, y, test_size=0.4)
+    lasso_model =lasso.fit(x_train, y_train)
+    scores = cross_val_score(lasso_model, x_train, y_train, cv=5)
+    y_predict = lasso_model.predict(x_test)
+
+    plt.scatter(x_test[:,0], y_test, color='blue')
+    plt.scatter(x_test[:,0], y_predict, color='red')
+
+    print('LASSO REGRESSION')
+    print('CROSS VALIDATION:', scores[0], scores[1], scores[2], scores[3],scores[4])
+    print ('MAE LASSO:', metrics.mean_absolute_error(y_test, y_predict))
+    print ('MSE LASSO:', metrics.mean_squared_error(y_test, y_predict))
+    print ('RMSE LASSO:', np.sqrt(metrics.mean_squared_error(y_test, y_predict)))
+    print ("LASSO -> R2 TRAIN: ", lasso_model.score(x_train, y_train))
+    print ("LASSO -> R2 TEST: ", lasso_model.score(x_test, y_test))
+
+    return lasso_model
+
+
+
+
+
 
 modeloMatriz= pd.read_csv('modeloMatriz.csv',sep='|')
 modeloMatriz = modeloMatriz.iloc[:,1:]
