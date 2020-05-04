@@ -112,14 +112,27 @@ modeloMatriz= pd.read_csv('modeloMatriz.csv',sep='|')
 modeloMatriz = modeloMatriz.iloc[:,1:]
 
 
+st.write(
+      '<h1 class="titulo">Calcular Precio M2 (CABA)</h1>',
+      unsafe_allow_html=True
+  )
+#st.title('')
 
 
-st.title('Calcular Precio M2 (CABA)')
+st.markdown('<style>.titulo{color:#dedede}.titulo:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
 
-var_superficie = st.text_input("Ingrese la superficie total a calcular", 0)
+st.write(
+      '<h3 class="sup_total">Ingrese la Superficie Total...</h3>',
+      unsafe_allow_html=True
+  )
+
+st.markdown('<style>.sup_total{color:#dedede}.sup_total:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
 
+var_superficie = st.text_input('')
+
+st.title('')
 
 if st.checkbox('Jardin'):
 	JARDIN = '1'   
@@ -141,8 +154,19 @@ df = pd.DataFrame({
 
 diccionar_tipos = {'Casa':'CASA','Departamento':'DTO','PH':'PH'}
 
+
+st.write(
+      '<h3 class="tipo_propiedad">Seleccione el Tipo de Propiedad...</h3>',
+      unsafe_allow_html=True
+  )
+
+
+st.markdown('<style>.tipo_propiedad{color:#dedede}.tipo_propiedad:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+
+
+
 var_tipo = st.selectbox(
-    '¿Tipo de Propiedad?',
+    '',
      df['Propiedad'])
 
 
@@ -171,8 +195,23 @@ df = pd.DataFrame({
 
 diccionar_tipos = {'Casa':'CASA','Departamento':'DTO','PH':'PH'}
 
+
+
+st.write(
+      '<h3 class="barrio">Seleccione el barrio...</h3>',
+      unsafe_allow_html=True
+  )
+
+st.markdown('<style>.barrio{color:#dedede}.barrio:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+
+
+st.markdown('<style>html{background: #fffff}</style>', unsafe_allow_html=True)
+
+
+
+
 var_barrio = st.selectbox(
-    'Elegi el barrio a calcular...',
+    '',
      df['barrios'])
 
 
@@ -188,16 +227,21 @@ TIPO_DE_PROPIEDAD = diccionar_tipos[var_tipo]
 BARRIO = var_barrio
 
 
+st.title('')
+
+ 
+
 
 if st.button('Predecir Precio'):
-	modelo = modelo_lasso_cross_validation(modeloMatriz)
-	nuevos_Feactures = nuevosDatos(modeloMatriz, SUPERFICIE_TOTAL, JARDIN, TERRAZA, CANTIDAD_DE_AMBIENTES, TIPO_DE_PROPIEDAD, BARRIO)
-	y_predict = modelo.predict(nuevos_Feactures)
-	st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int)))
+  if SUPERFICIE_TOTAL.isnumeric():
+    modelo = modelo_lasso_cross_validation(modeloMatriz)
+    nuevos_Feactures = nuevosDatos(modeloMatriz, SUPERFICIE_TOTAL, JARDIN, TERRAZA, CANTIDAD_DE_AMBIENTES, TIPO_DE_PROPIEDAD, BARRIO)
+    y_predict = modelo.predict(nuevos_Feactures)
+    st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int)))
+  else:
+    st.title('Debe Ingresar un valor correcto de Superficie Total')
 
-
-
-
+st.title('')
 
 
 
