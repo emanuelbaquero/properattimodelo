@@ -119,7 +119,7 @@ st.write(
 #st.title('')
 
 
-st.markdown('<style>.titulo{color:#dedede}.titulo:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+st.markdown('<style>.titulo{color:#9f9f9f}.titulo:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
 
 st.write(
@@ -127,7 +127,7 @@ st.write(
       unsafe_allow_html=True
   )
 
-st.markdown('<style>.sup_total{color:#dedede}.sup_total:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+st.markdown('<style>.sup_total{color:#9f9f9f}.sup_total:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
 
 var_superficie = st.text_input('')
@@ -161,7 +161,7 @@ st.write(
   )
 
 
-st.markdown('<style>.tipo_propiedad{color:#dedede}.tipo_propiedad:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+st.markdown('<style>.tipo_propiedad{color:#9f9f9f}.tipo_propiedad:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
 
 
@@ -202,7 +202,7 @@ st.write(
       unsafe_allow_html=True
   )
 
-st.markdown('<style>.barrio{color:#dedede}.barrio:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+st.markdown('<style>.barrio{color:#9f9f9f}.barrio:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
 
 st.markdown('<style>html{background: #fffff}</style>', unsafe_allow_html=True)
