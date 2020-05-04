@@ -72,7 +72,7 @@ def nuevosDatos (p_modeloMatriz, superficie_total, jardin, terraza, ambientes, t
     return predecir_data
 
 
-
+@st.cache
 def modelo_lasso_cross_validation(p_modeloMatriz):
     
     modeloMatriz = p_modeloMatriz
@@ -119,10 +119,14 @@ st.write(
 #st.title('')
 
 
-st.markdown('<style>.titulo{color:#9f9f9f;padding:10%;}.titulo:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+st.markdown('<style>.titulo{color:#9f9f9f;padding:10%;margin-botton:10%;}.titulo:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
 
-st.markdown('<style>.reportview-container .main .block-container{border-radius:5%;padding:5%;margin:5%;background:#fff8f8;}</style>', unsafe_allow_html=True)
+st.markdown('<style>.reportview-container .main .block-container{border-radius:5%;padding:5%;margin:5%;background:#fff8f8;text-align:center;}</style>', unsafe_allow_html=True)
+
+
+st.markdown('<style>.block-container{text-align:center;}</style>', unsafe_allow_html=True)
+
 
 st.markdown('<style>html{padding:5%;background:#eeeeee;}</style>', unsafe_allow_html=True)
 
@@ -131,7 +135,7 @@ st.write(
       unsafe_allow_html=True
   )
 
-st.markdown('<style>.sup_total{color:#9f9f9f}.sup_total:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+st.markdown('<style>h3.sup_total{margin:0;padding:0;} .sup_total{color:#9f9f9f;}.sup_total:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
 
 var_superficie = st.text_input('')
@@ -150,7 +154,7 @@ else:
 	TERRAZA = '0'
 
 
-st.markdown('<style>.st-bp.st-c3.st-ai.st-ae.st-af.st-ag.st-c4{color:#9f9f9f}.st-ai{color:#9f9f9f}</style>', unsafe_allow_html=True)
+st.markdown('<style>.st-bp.st-c3.st-ai.st-ae.st-af.st-ag.st-c4{color:#9f9f9f;}.st-ai{color:#9f9f9f}</style>', unsafe_allow_html=True)
 
 
 
@@ -170,7 +174,7 @@ st.write(
   )
 
 
-st.markdown('<style>.tipo_propiedad{color:#9f9f9f}.tipo_propiedad:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+st.markdown('<style>h3.tipo_propiedad{margin:0;padding:0;} .tipo_propiedad{color:#9f9f9f}.tipo_propiedad:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
 
 
@@ -211,7 +215,10 @@ st.write(
       unsafe_allow_html=True
   )
 
-st.markdown('<style>.barrio{color:#9f9f9f}.barrio:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+
+
+
+st.markdown('<style>.barrio{color:#9f9f9f;}.barrio:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
 
 st.markdown('<style>html{background: #fffff}</style>', unsafe_allow_html=True)
@@ -249,6 +256,11 @@ if st.button('Predecir Precio'):
     st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int)))
   else:
     st.title('Debe Ingresar un valor correcto de Superficie Total')
+
+
+st.markdown('<style>.st-dd{background:#ff5454;}button.st-ae{color:white;}</style>', unsafe_allow_html=True)
+
+
 
 st.title('')
 
