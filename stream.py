@@ -144,10 +144,15 @@ else:
 	JARDIN = '0'   
 
 
-if st.checkbox('Terraza'):
+if st.checkbox('Terraza' ):
 	TERRAZA = '1'
 else:
 	TERRAZA = '0'
+
+
+st.markdown('<style>.st-bp.st-c3.st-ai.st-ae.st-af.st-ag.st-c4{color:#9f9f9f}.st-ai{color:#9f9f9f}</style>', unsafe_allow_html=True)
+
+
 
 
 df = pd.DataFrame({
