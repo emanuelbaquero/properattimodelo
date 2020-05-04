@@ -119,8 +119,12 @@ st.write(
 #st.title('')
 
 
-st.markdown('<style>.titulo{color:#9f9f9f}.titulo:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+st.markdown('<style>.titulo{color:#9f9f9f;padding:10%;}.titulo:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
+
+st.markdown('<style>.reportview-container .main .block-container{border-radius:5%;padding:5%;margin:5%;background:#fff8f8;}</style>', unsafe_allow_html=True)
+
+st.markdown('<style>html{padding:5%;background:#eeeeee;}</style>', unsafe_allow_html=True)
 
 st.write(
       '<h3 class="sup_total">Ingrese la Superficie Total...</h3>',
