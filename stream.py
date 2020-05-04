@@ -124,32 +124,31 @@ st.write(
   )
 
 
-st.markdown('<style>h1.titulo{color:#9f9f9f;padding:0;margin-botton:0;}.titulo:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+st.markdown('<style>h1.titulo{color:black;padding-top:4%;margin-botton:0;}.titulo:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
-st.markdown('<style>h3.titulo_secundario{color:#9f9f9f;padding:0;margin-botton:0;}.titulo:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
-
-
+st.markdown('<style>h3.titulo_secundario{color:#9f9f9f;padding:0;margin-botton:-25px;}.titulo:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
 
-st.markdown('<style>.reportview-container .main .block-container{border-radius:5%;padding:5%;margin:5%;background:#fff8f8;text-align:center;}</style>', unsafe_allow_html=True)
+
+
+st.markdown('<style>.reportview-container .main .block-container{border-radius:0%;padding:2%;margin:0%;background:#fff8f8;text-align:center;opacity:.95;}</style>', unsafe_allow_html=True)
 
 
 st.markdown('<style>.block-container{text-align:center;}</style>', unsafe_allow_html=True)
 
 
-st.markdown('<style>html{padding:5%;background:#eeeeee;}</style>', unsafe_allow_html=True)
+#st.markdown('<style>html{padding:5%;background:#eeeeee;}</style>', unsafe_allow_html=True)
 
 st.write(
       '<h3 class="sup_total">Ingrese la Superficie Total...</h3>',
       unsafe_allow_html=True
   )
 
-st.markdown('<style>h3.sup_total{margin:-2%;padding:0;} .sup_total{color:#9f9f9f;}.sup_total:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+st.markdown('<style>h3.sup_total{margin-top:-5%;margin:-5%;padding:0;} .sup_total{color:#9f9f9f;}.sup_total:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
 
 var_superficie = st.text_input('')
 
-st.title('')
 
 if st.checkbox('Jardin'):
 	JARDIN = '1'   
@@ -164,10 +163,6 @@ else:
 
 
 st.markdown('<style>.st-bp.st-c3.st-ai.st-ae.st-af.st-ag.st-c4{color:#9f9f9f;}.st-ai{color:#9f9f9f}</style>', unsafe_allow_html=True)
-
-
-
-st.markdown('<style>div.Widget.row-widget.stCheckbox{margin-left:45%;}</style>', unsafe_allow_html=True)
 
 
 
@@ -275,10 +270,15 @@ if st.button('Predecir Precio'):
 
 st.markdown('<style>.st-dd{background:#ff5454;}button.st-ae{color:white;}</style>', unsafe_allow_html=True)
 
+  
 
-st.markdown('<style>html{background: #fffff}</style>', unsafe_allow_html=True)
+
+#st.markdown('<style>html{background: #fffff}</style>', unsafe_allow_html=True)
+
+st.markdown('<style>html{background-image: url("https://c0.wallpaperflare.com/preview/494/435/823/argentina-buenos-aires-obelisco-ba.jpg");background-repeat: no-repeat;background-size:cover;}</style>', unsafe_allow_html=True)
 
 
+  
 
 
 
