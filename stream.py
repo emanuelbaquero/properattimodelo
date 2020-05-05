@@ -13,6 +13,92 @@ import matplotlib.pyplot as plt
 
 
 
+@st.cache
+def modelo_regresion_lineal(p_modeloMatriz):
+
+    modeloMatriz = p_modeloMatriz
+ 
+    xs = modeloMatriz.iloc[:,1:]
+    y = modeloMatriz.iloc[:,0]
+    
+    #TRANSFORMO VARIABLES INDEPENDIENTES EN FORMATO MATRIZ
+    xs = xs.as_matrix()
+    #TRANSFORMO VARIABLE DEPENDIENTE EN FORMATO MATRIZ
+    y = y.as_matrix()
+    #PARTICIONAR DATOS DE ENTRENAMIENTO Y TESTING
+    x_train, x_test, y_train, y_test = train_test_split(xs, y, test_size=0.6)
+
+    #FIT 
+    modelo = linear_model.LinearRegression(fit_intercept=False,normalize=True, n_jobs=1)
+    modelo.fit(x_train,y_train)
+    #CROSS VALIDATION
+    scores = cross_val_score(modelo, x_train, y_train, cv=5)
+    #PREDECIR DATOS "Y" DE "X" TEST 
+    y_predict = modelo.predict(x_test)
+    #PENDIENTES
+    pendientes = modelo.coef_
+    #ORDENADA 
+    ordenada = modelo.intercept_
+
+    #GENERO EJE X -> SUPERFICIE TOTAL
+    #x1 = x_test[:,0]
+    #GENERO EJE Y -> PRECIO M2 DE TEST
+    #x2 = y_test
+    # EJE Y -> PRECIO M2 PREDICHO
+    #x3 = y_predict
+    #PLOT
+    #plt.scatter(x1,x2,label='test modelo', color='blue')
+    #plt.scatter(x1,x3,label='prediccion modelo', color='red')
+    #plt.scatter(x2,x3,label='prediccion modelo_2', color='yellow')
+    #plt.title('grafico modelo')
+    #plt.show()
+    #print('CROSS VALIDATION:', scores[0], scores[1], scores[2], scores[3],scores[4])
+    #print ('MAE:', metrics.mean_absolute_error(y_test, y_predict))
+    #print ('MSE:', metrics.mean_squared_error(y_test, y_predict))
+    #print ('RMSE:', np.sqrt(metrics.mean_squared_error(y_test, y_predict)))
+    #print('EL R2 TRAIN ES DE: ', modelo.score(x_train,y_train))
+    #print('EL R2 TEST ES DE: ', modelo.score(x_test,y_test))    
+    
+    return modelo
+
+
+
+@st.cache
+def modelo_ridge_cross_validation(p_modeloMatriz):
+    
+    modeloMatriz = p_modeloMatriz
+
+    xs = modeloMatriz.iloc[:,1:]
+    y = modeloMatriz.iloc[:,0]
+    xs = xs.as_matrix()
+    y = y.as_matrix()
+
+    rlmcv = linear_model.RidgeCV(alphas=np.linspace(0.01,100, 1000), cv=5, normalize=True)
+    x_train, x_test, y_train, y_test = train_test_split(xs, y, test_size=0.4)
+    rlmcv.fit(x_train, y_train)
+    predictions = rlmcv.predict(x_test)
+    alpha_ridge = rlmcv.alpha_
+
+    rlm = linear_model.Ridge(alpha=alpha_ridge, normalize=True)
+    x_train, x_test, y_train, y_test = train_test_split(xs, y, test_size=0.4)
+    ridge_model = rlm.fit(x_train, y_train)
+    scores = cross_val_score(ridge_model, x_train, y_train, cv=5)
+    y_predict = ridge_model.predict(x_test)
+
+    #plt.scatter(x_test[:,0], y_test, color='blue')
+    #plt.scatter(x_test[:,0], y_predict, color='red')
+
+    #print('REGULARIZACION CON RIDGE')
+    #print('CROSS VALIDATION:', scores[0], scores[1], scores[2], scores[3],scores[4])
+    #print ('MAE RIDGE:', metrics.mean_absolute_error(y_test, y_predict))
+    #print ('MSE RIDGE:', metrics.mean_squared_error(y_test, y_predict))
+    #print ('RMSE RIDGE:', np.sqrt(metrics.mean_squared_error(y_test, y_predict)))   
+    #print ("RIDGE -> R2 TRAIN: ", ridge_model.score(x_train, y_train))
+    #print ("RIDGE -> R2 TEST: ", ridge_model.score(x_test, y_test))
+
+    return ridge_model
+
+
 def nuevosDatos (p_modeloMatriz, superficie_total, jardin, terraza, ambientes, tipo, barrio):
 
                             
@@ -246,23 +332,67 @@ var_barrio = st.selectbox(
 
 
 
+dfm = pd.DataFrame({
+  'Modelos': ['Regresion Lineal Multiple', 'Regresion Ridge', 'Regresion Lasso'],
+  'second column': [10, 20, 30]
+})
+ 
+
+
+st.write(
+      '<h3 class="tipo_modelo">Seleccione el Modelo a Utilizar...</h3>',
+      unsafe_allow_html=True
+)
+
+
+st.markdown('<style>h3.tipo_propiedad{margin:-3%;padding:0;} .tipo_propiedad{color:#9f9f9f}.tipo_propiedad:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+
+
+
+diccionar_modelos = {'Regresion Lineal Multiple':'M','Regresion Ridge':'R','Regresion Lasso':'L'}
+
+
+var_modelo = st.selectbox('   ',dfm['Modelos'])
+
+
+st.markdown('<style>h3.tipo_modelo{margin:0;padding:0;} .tipo_modelo{color:#9f9f9f}.tipo_modelo:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+
+
+
+st.markdown('<style>h3.tipo_modelo{margin:0;padding:0;padding-top:3%;}</style>', unsafe_allow_html=True)
+
+
+
+
+
 SUPERFICIE_TOTAL = var_superficie           
 CANTIDAD_DE_AMBIENTES = '1'       
 TIPO_DE_PROPIEDAD = diccionar_tipos[var_tipo]
 BARRIO = var_barrio
 
 
-st.title('')
+st.title(diccionar_modelos[var_modelo])
 
  
 
 
 if st.button('Predecir Precio'):
   if SUPERFICIE_TOTAL.isnumeric():
-    modelo = modelo_lasso_cross_validation(modeloMatriz)
     nuevos_Feactures = nuevosDatos(modeloMatriz, SUPERFICIE_TOTAL, JARDIN, TERRAZA, CANTIDAD_DE_AMBIENTES, TIPO_DE_PROPIEDAD, BARRIO)
-    y_predict = modelo.predict(nuevos_Feactures)
-    st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int)))
+    if diccionar_modelos[var_modelo] == 'M':
+      modelo = modelo_regresion_lineal(modeloMatriz)
+      y_predict = modelo.predict(nuevos_Feactures)
+      st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int)))
+    if diccionar_modelos[var_modelo] == 'R':
+      modelo = modelo_ridge_cross_validation(modeloMatriz)
+      y_predict = modelo.predict(nuevos_Feactures)
+      st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int)))  
+    if diccionar_modelos[var_modelo] == 'L':
+      modelo = modelo_lasso_cross_validation(modeloMatriz)
+      y_predict = modelo.predict(nuevos_Feactures)
+      st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int))) 
+
+
   else:
     st.title('Debe Ingresar un valor correcto de Superficie Total')
 
