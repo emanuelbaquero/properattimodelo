@@ -283,6 +283,15 @@ if st.button('Predecir Precio'):
 st.markdown('<style>.st-dd{background:#ff5454;}button.st-ae{color:white;}</style>', unsafe_allow_html=True)
 
   
+st.write(
+      '<footer><div class="div_git"><a href="https://github.com/dh-Grupo6/modelo-properatti"><img class="git" src="https://banner2.kisspng.com/20180326/kze/kisspng-github-computer-icons-github-5ab8a43c40d844.3335024615220501082656.jpg"></img></a></div></footer>',
+      unsafe_allow_html=True
+)
+
+
+st.markdown('<style>.git{width:4%;border-radius:85%;}.div_git{opacity:50%;position: absolute;bottom:-8em;left:-0.2%;}.div_git:hover{opacity:100%;}</style>', unsafe_allow_html=True)
+
+  
 
 
 st.markdown('<style>html{background: #F0F0F0}</style>', unsafe_allow_html=True)
