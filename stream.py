@@ -264,16 +264,20 @@ st.title(diccionar_modelos[var_modelo])
 
 if st.button('Predecir Precio'):
   if SUPERFICIE_TOTAL.isnumeric():
-    nuevos_Feactures = nuevosDatos(modeloMatriz, SUPERFICIE_TOTAL, JARDIN, TERRAZA, CANTIDAD_DE_AMBIENTES, TIPO_DE_PROPIEDAD, BARRIO)
-    if diccionar_modelos[var_modelo] == 'M':
-      y_predict = modelo_multiple.predict(nuevos_Feactures)
-      st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int)))
-    if diccionar_modelos[var_modelo] == 'R':
-      y_predict = modelo_ridge.predict(nuevos_Feactures)
-      st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int)))  
-    if diccionar_modelos[var_modelo] == 'L':
-      y_predict = modelo_lasso.predict(nuevos_Feactures)
-      st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int))) 
+    if int(SUPERFICIE_TOTAL)<2000 and int(SUPERFICIE_TOTAL)>0:
+      nuevos_Feactures = nuevosDatos(modeloMatriz, SUPERFICIE_TOTAL, JARDIN, TERRAZA, CANTIDAD_DE_AMBIENTES, TIPO_DE_PROPIEDAD, BARRIO)
+      if diccionar_modelos[var_modelo] == 'M':
+        y_predict = modelo_multiple.predict(nuevos_Feactures)
+        st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int)))
+      if diccionar_modelos[var_modelo] == 'R':
+        y_predict = modelo_ridge.predict(nuevos_Feactures)
+        st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int)))  
+      if diccionar_modelos[var_modelo] == 'L':
+        y_predict = modelo_lasso.predict(nuevos_Feactures)
+        st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int))) 
+    else:
+      st.title('Superficie Total fuera de rango')
+      st.header('(0,2000)')
 
 
   else:
