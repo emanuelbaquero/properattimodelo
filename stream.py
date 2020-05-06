@@ -8,102 +8,7 @@ from sklearn import metrics
 from sklearn import linear_model
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
-
-
-
-
-
-@st.cache
-def modelo_regresion_lineal(p_modeloMatriz):
-
-    modeloMatriz = p_modeloMatriz
- 
-    xs = modeloMatriz.iloc[:,1:]
-    y = modeloMatriz.iloc[:,0]
-    
-    #TRANSFORMO VARIABLES INDEPENDIENTES EN FORMATO MATRIZ
-    #xs = xs.as_matrix()
-    #TRANSFORMO VARIABLE DEPENDIENTE EN FORMATO MATRIZ
-    #y = y.as_matrix()
-    #PARTICIONAR DATOS DE ENTRENAMIENTO Y TESTING
-    
-    xs = np.array(xs)
-    y = np.array(y)
-
-    x_train, x_test, y_train, y_test = train_test_split(xs, y, test_size=0.6)
-
-    #FIT 
-    modelo = linear_model.LinearRegression(fit_intercept=False,normalize=True, n_jobs=1)
-    modelo.fit(x_train,y_train)
-    #CROSS VALIDATION
-    scores = cross_val_score(modelo, x_train, y_train, cv=5)
-    #PREDECIR DATOS "Y" DE "X" TEST 
-    y_predict = modelo.predict(x_test)
-    #PENDIENTES
-    pendientes = modelo.coef_
-    #ORDENADA 
-    ordenada = modelo.intercept_
-
-    #GENERO EJE X -> SUPERFICIE TOTAL
-    #x1 = x_test[:,0]
-    #GENERO EJE Y -> PRECIO M2 DE TEST
-    #x2 = y_test
-    # EJE Y -> PRECIO M2 PREDICHO
-    #x3 = y_predict
-    #PLOT
-    #plt.scatter(x1,x2,label='test modelo', color='blue')
-    #plt.scatter(x1,x3,label='prediccion modelo', color='red')
-    #plt.scatter(x2,x3,label='prediccion modelo_2', color='yellow')
-    #plt.title('grafico modelo')
-    #plt.show()
-    #print('CROSS VALIDATION:', scores[0], scores[1], scores[2], scores[3],scores[4])
-    #print ('MAE:', metrics.mean_absolute_error(y_test, y_predict))
-    #print ('MSE:', metrics.mean_squared_error(y_test, y_predict))
-    #print ('RMSE:', np.sqrt(metrics.mean_squared_error(y_test, y_predict)))
-    #print('EL R2 TRAIN ES DE: ', modelo.score(x_train,y_train))
-    #print('EL R2 TEST ES DE: ', modelo.score(x_test,y_test))    
-    
-    return modelo
-
-
-
-@st.cache
-def modelo_ridge_cross_validation(p_modeloMatriz):
-    
-    modeloMatriz = p_modeloMatriz
-
-    xs = modeloMatriz.iloc[:,1:]
-    y = modeloMatriz.iloc[:,0]
-    #xs = xs.as_matrix()
-    #y = y.as_matrix()
-
-    xs = np.array(xs)
-    y = np.array(y)
-
-    rlmcv = linear_model.RidgeCV(alphas=np.linspace(0.01,100, 1000), cv=5, normalize=True)
-    x_train, x_test, y_train, y_test = train_test_split(xs, y, test_size=0.4)
-    rlmcv.fit(x_train, y_train)
-    predictions = rlmcv.predict(x_test)
-    alpha_ridge = rlmcv.alpha_
-
-    rlm = linear_model.Ridge(alpha=alpha_ridge, normalize=True)
-    x_train, x_test, y_train, y_test = train_test_split(xs, y, test_size=0.4)
-    ridge_model = rlm.fit(x_train, y_train)
-    scores = cross_val_score(ridge_model, x_train, y_train, cv=5)
-    y_predict = ridge_model.predict(x_test)
-
-    #plt.scatter(x_test[:,0], y_test, color='blue')
-    #plt.scatter(x_test[:,0], y_predict, color='red')
-
-    #print('REGULARIZACION CON RIDGE')
-    #print('CROSS VALIDATION:', scores[0], scores[1], scores[2], scores[3],scores[4])
-    #print ('MAE RIDGE:', metrics.mean_absolute_error(y_test, y_predict))
-    #print ('MSE RIDGE:', metrics.mean_squared_error(y_test, y_predict))
-    #print ('RMSE RIDGE:', np.sqrt(metrics.mean_squared_error(y_test, y_predict)))   
-    #print ("RIDGE -> R2 TRAIN: ", ridge_model.score(x_train, y_train))
-    #print ("RIDGE -> R2 TEST: ", ridge_model.score(x_test, y_test))
-
-    return ridge_model
+import pickle
 
 
 def nuevosDatos (p_modeloMatriz, superficie_total, jardin, terraza, ambientes, tipo, barrio):
@@ -165,44 +70,18 @@ def nuevosDatos (p_modeloMatriz, superficie_total, jardin, terraza, ambientes, t
     return predecir_data
 
 
-@st.cache
-def modelo_lasso_cross_validation(p_modeloMatriz):
-    
-    modeloMatriz = p_modeloMatriz
+### PICKLE
 
-    xs = modeloMatriz.iloc[:,1:]
-    y = modeloMatriz.iloc[:,0]
-    xs = np.array(xs)  
-    y = np.array(y) 
-    lassocv = linear_model.LassoCV(alphas=np.linspace(0.01,100, 1000), cv=5, normalize=True)
-    x_train, x_test, y_train, y_test = train_test_split(xs, y, test_size=0.4)
-    lassocv.fit(x_train, y_train)
-    alpha_lasso = lassocv.alpha_
+with open('modelo.pkl', 'rb') as f_math:
+    modelos = pickle.load(f_math)
 
-    lasso = linear_model.Lasso(alpha=alpha_lasso, normalize=True)
-    x_train, x_test, y_train, y_test = train_test_split(xs, y, test_size=0.4)
-    lasso_model =lasso.fit(x_train, y_train)
-    scores = cross_val_score(lasso_model, x_train, y_train, cv=5)
-    y_predict = lasso_model.predict(x_test)
-
-    #plt.scatter(x_test[:,0], y_test, color='blue')
-    #plt.scatter(x_test[:,0], y_predict, color='red')
-
-    #print('LASSO REGRESSION')
-    #print('CROSS VALIDATION:', scores[0], scores[1], scores[2], scores[3],scores[4])
-    #print ('MAE LASSO:', metrics.mean_absolute_error(y_test, y_predict))
-    #print ('MSE LASSO:', metrics.mean_squared_error(y_test, y_predict))
-    #print ('RMSE LASSO:', np.sqrt(metrics.mean_squared_error(y_test, y_predict)))
-    #print ("LASSO -> R2 TRAIN: ", lasso_model.score(x_train, y_train))
-    #print ("LASSO -> R2 TEST: ", lasso_model.score(x_test, y_test))
-
-    return lasso_model
+modeloMatriz = modelos['modeloMatriz']
+modelo_multiple = modelos['multiple']
+modelo_ridge = modelos['ridge']
+modelo_lasso = modelos['lasso']
 
 
 
-
-modeloMatriz= pd.read_csv('modeloMatriz.csv',sep='|')
-modeloMatriz = modeloMatriz.iloc[:,1:]
 
 
 st.write(
@@ -217,7 +96,7 @@ st.write(
   )
 
 
-st.markdown('<style>h1.titulo{color:black;padding-top:4%;margin-botton:0;}.titulo:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
+st.markdown('<style>h1.titulo{color:black;padding-top:-4%;margin-botton:0;}.titulo:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
 st.markdown('<style>h3.titulo_secundario{color:#9f9f9f;padding:0;}.titulo:hover{color:#ff5454;}</style>', unsafe_allow_html=True)
 
@@ -387,16 +266,13 @@ if st.button('Predecir Precio'):
   if SUPERFICIE_TOTAL.isnumeric():
     nuevos_Feactures = nuevosDatos(modeloMatriz, SUPERFICIE_TOTAL, JARDIN, TERRAZA, CANTIDAD_DE_AMBIENTES, TIPO_DE_PROPIEDAD, BARRIO)
     if diccionar_modelos[var_modelo] == 'M':
-      modelo = modelo_regresion_lineal(modeloMatriz)
-      y_predict = modelo.predict(nuevos_Feactures)
+      y_predict = modelo_multiple.predict(nuevos_Feactures)
       st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int)))
     if diccionar_modelos[var_modelo] == 'R':
-      modelo = modelo_ridge_cross_validation(modeloMatriz)
-      y_predict = modelo.predict(nuevos_Feactures)
+      y_predict = modelo_ridge.predict(nuevos_Feactures)
       st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int)))  
     if diccionar_modelos[var_modelo] == 'L':
-      modelo = modelo_lasso_cross_validation(modeloMatriz)
-      y_predict = modelo.predict(nuevos_Feactures)
+      y_predict = modelo_lasso.predict(nuevos_Feactures)
       st.title('El precio por M2 es de U$D'+str(y_predict[0].round(-1).astype(int))) 
 
 
